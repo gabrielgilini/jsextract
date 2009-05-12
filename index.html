@@ -1,8 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+"http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
         <title>Extract Test</title>
+        <style>
+            .pic {
+                float: left;
+                width: 150px;
+                height: 150px;
+                text-align: center;
+                font-size: 12px;
+            }
+
+            .pic img {
+                margin: 0 auto;
+            }
+        </style>
         <script type="text/javascript" src="extract.js"></script>
         <script type="text/javascript">
             function appendText(string, father){
@@ -31,19 +44,34 @@
                 appendText("result array length: " + res.length , r);
             }
         </script>
-	<script type='text/javascript'>
-		function jsonFlickrApi(data){
-			var r = document.getElementById('results');
-			var dt = new Date;
-			var res = extract('/title', data.photos.photo);
-			dt = (new Date) - dt;
-			console.log(res);
-		}	
-	</script>
-	<script type="text/javascript" src="http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b8e7f72c66eec2f402e9701d926d9f54&format=json"></script>
+    <script type='text/javascript'>
+        function jsonFlickrApi(data){
+            window.fInfo = {
+                'ids': extract('/id', data.photos.photo),
+                'farms': extract('/farm', data.photos.photo),
+                'titles': extract('/title', data.photos.photo),
+                'servers': extract('/server', data.photos.photo),
+                'secrets': extract('/secret', data.photos.photo),
+            };
+        }
+
+        function appendPics(){
+            var r = document.getElementById('results');
+            var out = '';
+            for(var i = 0, l = window.fInfo.ids.length; i < l; ++i){
+                out+= '<div class="pic"><img src="http://farm'+
+                        window.fInfo.farms[i] + '.static.flickr.com/' +
+                        window.fInfo.servers[i] + '/' + window.fInfo.ids[i] + '_' +
+                        window.fInfo.secrets[i] + '_s.jpg"><p>' +
+                        window.fInfo.titles[i] + '</p></div>';
+            }
+            r.innerHTML = out;
+        }
+    </script>
+    <script type="text/javascript" src="http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b8e7f72c66eec2f402e9701d926d9f54&format=json"></script>
     </head>
-    <body>
+    <body onload='appendPics()'>
         <div id="results">
         </div>
     </body>
-</html> 
+</html>

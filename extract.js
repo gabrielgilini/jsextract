@@ -1,6 +1,5 @@
 function extract(path, iterable){
-    if((typeof iterable.length != 'number') || (path.indexOf('/') !==
-0)){
+    if((typeof iterable.length != 'number') || (path.indexOf('/') !== 0)){
         return false;
     }
     if(path == '/'){
@@ -27,5 +26,4 @@ function getPropertyRecursively(props, obj){
     if(obj[prop]){
         return getPropertyRecursively(props, obj[prop]);
     }
-
 }
