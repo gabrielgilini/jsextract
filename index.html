@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Extract Test</title>
+        <script type="text/javascript" src="extract.js"></script>
+        <script type="text/javascript">
+            function appendText(string, father){
+                var pE = document.createElement('p');
+                var tN = document.createTextNode(string);
+
+                pE.appendChild(tN);
+                father.appendChild(pE);
+            }
+
+            window.onload = function(){
+                var r = document.getElementById('results');
+                var foo = [];
+                for(var i = 0; i < 1000; ++i){
+                    if(i % 2){
+                        foo[i] = {'bar': 'bar'};
+                    }else{
+                        foo[i] = {'bar': 'bar', 'baz': {'theAnswer':
+42}};
+                    }
+                }
+                var dt = new Date;
+                var res = extract('/baz/theAnswer', foo);
+                dt = (new Date) - dt;
+                appendText(dt + 'ms', r);
+                appendText("result array length: " + res.length , r);
+            }
+        </script>
+	<script type='text/javascript'>
+		function jsonFlickrApi(data){
+			var r = document.getElementById('results');
+			var dt = new Date;
+			var res = extract('/title', data.photos.photo);
+			dt = (new Date) - dt;
+			console.log(res);
+		}	
+	</script>
+	<script type="text/javascript" src="http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b8e7f72c66eec2f402e9701d926d9f54&format=json"></script>
+    </head>
+    <body>
+        <div id="results">
+        </div>
+    </body>
+</html> 

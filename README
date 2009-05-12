@@ -1,0 +1,27 @@
+This is an attempt to build a XPath data extractor which could be useful on handling JSON API's responses.
+
+Given an array:
+var arr = [
+	{
+		'foo': 'bar',
+		'baz': { 'theNumber' : 42 }
+	},
+	{
+		'foo': 'bar',
+		'baz': { 'theNumber' : 84 }
+	},
+	{
+		'foo': 'bar',
+		'baz': { 'theNumber' : 168 }
+	},
+	{
+		'foo': 'bar',
+		'baz': { 'theNumber' : 336 }
+	}
+];
+
+extract would be used as:
+
+var extracted = extract('/baz/theNumber', arr);
+
+Yielding - [ 42, 84, 168, 336 ]
