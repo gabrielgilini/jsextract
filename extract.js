@@ -1,20 +1,25 @@
 function extract(path, iterable){
-    if((typeof iterable.length != 'number') || (path.indexOf('/') !== 0)){
-        return false;
-    }
+    var filtered = [],
+        props;
+
     if(path == '/'){
         return iterable;
     }
-    var filtered = [];
-    var props = path.slice(1).split('/');
-    for(var i = 0, len = iterable.length, tmpVal; i < len; ++i){
-        tmpVal = getPropertyRecursively(props.slice(), iterable[i]);
-        if(tmpVal){
-            filtered.push(tmpVal);
+    else if(path.indexOf('/') === 0){
+        path = path.slice(1);
+    }
+
+    props = path.split('/');
+    //for(var i = 0, len = iterable.length, tmpVal; i < len; ++i){
+    for(var prop in iterable){
+        if(isOwnProperty(iterable, prop)){
+            tmpVal = getPropertyRecursively(props.slice(), iterable[prop]);
+            if(tmpVal){
+                filtered.push(tmpVal);
+            }
         }
     }
     return filtered;
-
 }
 
 function getPropertyRecursively(props, obj){
@@ -27,3 +32,10 @@ function getPropertyRecursively(props, obj){
         return getPropertyRecursively(props, obj[prop]);
     }
 }
+
+function isOwnProperty(o, p) {
+    var prop = o.constructor.prototype[p];
+    return typeof prop == 'undefined' || prop !== o[p];
+}
+
+//{ 'uno': { 'foo': { 'bar': 'hue' } }, 'dos': { 'foo': { 'bar': 'hua' } } }
