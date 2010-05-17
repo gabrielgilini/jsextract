@@ -26,16 +26,15 @@
                 var fInfo;
                 jsonFlickrApi = function(data)
                 {
-                    console.log(data);
                     fInfo = {
-                        'ids': API.extract('id', data.photoset.photo),
-                        'farms': API.extract('farm', data.photoset.photo),
+                        'ids': API.extract('/id', data.photoset.photo),
+                        'farms': API.extract('/farm', data.photoset.photo),
                         'titles': API.extract('/title', data.photoset.photo),
-                        'servers': API.extract('server', data.photoset.photo),
+                        'servers': API.extract('/server', data.photoset.photo),
                         'secrets': API.extract('/secret', data.photoset.photo),
                     };
                 }
-    
+
                 appendPics = function()
                 {
                     var r = document.getElementById('results');

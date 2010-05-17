@@ -20,7 +20,7 @@ var API = {};
                     return obj[props];
                 }
             }
-    
+
             var prop = props.shift();
             if(propRegExp.test(prop))
             {
@@ -39,13 +39,13 @@ var API = {};
             }
         };
     })();
-    
+
     isOwnProperty = function(o, p)
     {
         var pr = o.constructor.prototype[p];
         return typeof pr == 'undefined' || pr !== o[p];
     };
-    
+
     iterate = function(obj, fn)
     {
         if(typeof obj.length == 'number')
@@ -66,14 +66,14 @@ var API = {};
             }
         }
     };
-    
+
     parsePath = function(obj, path)
     {
         var params = path.split('['),
             prop = params[0],
             cond = params[1].slice(0, -1),
             subj = obj[prop];
-    
+
         if(typeof subj != 'undefined')
         {
             params = paramRegExp.exec(cond);
@@ -109,21 +109,21 @@ var API = {};
             }
         }
     };
-    
+
     if(iterate && getPropertyRecursively)
     {
         API.extract = function(path, iterable)
         {
             var filtered = [],
                 props;
-        
+
             if(path == '/'){
                 return iterable;
             }
             else if(path.indexOf('/') === 0){
                 path = path.slice(1);
             }
-        
+
             props = path.split('/');
             iterate(iterable, function(it, prop){
                     var tmpVal = getPropertyRecursively(props.slice(), it[prop]);
@@ -137,4 +137,3 @@ var API = {};
     }
 })();
 
-//[{ 'foo': { 'bar': {'hue', 'lulz'}, 'interesting': 1 } }, { 'foo': { 'bar': {'hua', 'lol'}, 'interesting': 2 } }]
