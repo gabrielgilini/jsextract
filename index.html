@@ -20,30 +20,46 @@
         </style>
         <script type="text/javascript" src="extract.js"></script>
         <script type='text/javascript'>
-            function jsonFlickrApi(data){
-                window.fInfo = {
-                    'ids': extract('id', data.photos.photo),
-                    'farms': extract('farm', data.photos.photo),
-                    'titles': extract('/title', data.photos.photo),
-                    'servers': extract('server', data.photos.photo),
-                    'secrets': extract('/secret', data.photos.photo),
-                };
-            }
-
-            function appendPics(){
-                var r = document.getElementById('results');
-                var out = '';
-                for(var i = 0, l = window.fInfo.ids.length; i < l; ++i){
-                    out+= '<div class="pic"><img src="http://farm'+
-                            window.fInfo.farms[i] + '.static.flickr.com/' +
-                            window.fInfo.servers[i] + '/' + window.fInfo.ids[i] + '_' +
-                            window.fInfo.secrets[i] + '_s.jpg"><p>' +
-                            window.fInfo.titles[i] + '</p></div>';
+            var jsonFlickrApi, appendPics;
+            (function()
+            {
+                var fInfo;
+                jsonFlickrApi = function(data)
+                {
+                    console.log(data);
+                    fInfo = {
+                        'ids': API.extract('id', data.photoset.photo),
+                        'farms': API.extract('farm', data.photoset.photo),
+                        'titles': API.extract('/title', data.photoset.photo),
+                        'servers': API.extract('server', data.photoset.photo),
+                        'secrets': API.extract('/secret', data.photoset.photo),
+                    };
                 }
-                r.innerHTML = out;
-            }
+    
+                appendPics = function()
+                {
+                    var r = document.getElementById('results');
+                    var img, div, para;
+                    for(var i = 0, l = fInfo.ids.length; i < l; ++i)
+                    {
+                        div = document.createElement('div');
+                        div.className = "pic";
+                        img = document.createElement('img');
+                        img.src = 'http://farm'+
+                                fInfo.farms[i] + '.static.flickr.com/' +
+                                fInfo.servers[i] + '/' + fInfo.ids[i] + '_' +
+                                fInfo.secrets[i] + '_s.jpg';
+                        div.appendChild(img);
+                        para = document.createElement('p');
+                        para.appendChild(document.createTextNode(fInfo.titles[i]));
+                        div.appendChild(para);
+                        r.appendChild(div);
+                    }
+                    img = div = para = null;
+                }
+            })();
         </script>
-        <script type="text/javascript" src="http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=d6b0504353f5e2802b062845f5b8b65a&format=json"></script>
+        <script type="text/javascript" src="http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&photoset_id=1334652&api_key=d6b0504353f5e2802b062845f5b8b65a&format=json"></script>
     </head>
     <body onload='appendPics()'>
         <div id="results">
